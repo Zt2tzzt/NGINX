@@ -12,13 +12,35 @@ nginx
 
 Nginx 启动成功后，会作为一个后台进程一直运行。
 
+### 1.查看 Nginx 端口占用
+
+在命令行输入以下命令，查看 8080 端口占用情况：
+
+```shell
+lsof -i :8080
+```
+
+输出：
+
+```shell
+zetian@ZeTiandeMacBook-Pro ~ % lsof -i :8080
+COMMAND    PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+Google    1546 zetian   28u  IPv4 0x6572c7c7276f9c0b      0t0  TCP localhost:49728->localhost:http-alt (CLOSED)
+nginx     1812 zetian    6u  IPv4 0x6572c7c72771be73      0t0  TCP *:http-alt (LISTEN)
+nginx     1813 zetian    6u  IPv4 0x6572c7c72771be73      0t0  TCP *:http-alt (LISTEN)
+```
+
+可以看到，8080 端口，正被 Nginx 的两个进程占用。
+
+### 2.查看 Nginx 进程
+
 在命令行输入以下命令，查看 Nginx 进程：
 
 ```shell
 ps -ef|grep nginx
 ```
 
-输出
+输出：
 
 ```shell
 zetian@ZeTiandeMacBook-Pro ~ % ps -ef|grep nginx
@@ -27,15 +49,42 @@ zetian@ZeTiandeMacBook-Pro ~ % ps -ef|grep nginx
   501 12154 10080   0  6:02下午 ttys013    0:00.00 grep nginx
 ```
 
+第二列是 pid，即 Linux 系统中的进程 id。
+
 关注前两个进程，即 master 进程，和 worker 进程。
 
 Nginx 的进程模型
 
 ```mermaid
 graph TD
-A[方形] --> B(圆角)
-    B --> C{条件a}
-    C --> |a=1| D[结果1]
-    C --> |a=2| E[结果2]
-    F[竖向流程图]
+A[master]
+    A --> B[worker]
+    A --> C[worker]
+    A --> D[worker]
 ```
+
+master 进程，就是 Nginx 的主进程。主要负责：
+
+- 读取，验证配置文件。
+- 管理 worker 进程。
+
+worker 进程，就是 Nginx 的工作进程，主要负责：
+
+- 处理实际的请求。
+
+worker 进程的数量，可以通过配置文件来调整。
+
+## 二、Nginx 停止
+
+输入以下命令：
+
+```shell
+nginx -s [signal]
+```
+
+signal 可以是：
+
+- quit：优雅停止
+- stop：立即停止
+- reload：重载配置文件
+- reopen：重新打开日志文件
