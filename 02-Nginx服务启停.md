@@ -2,35 +2,35 @@
 
 ## 一、Nginx 启动
 
-在 Linux 系统中，在命令行输入：
+Linux 系统中，在命令行输入：
 
 ````shell
 nginx
 ````
 
-启动成功后，在浏览器输入 `localhost`，查看 Nginx 的欢迎页面。
+启动成功后，在浏览器输入 `localhost`（默认 80 端口），查看 Nginx 的欢迎页面。
 
 Nginx 启动成功后，会作为一个后台进程一直运行。
 
 ### 1.查看 Nginx 端口占用
 
-在命令行输入以下命令，查看 8080 端口占用情况：
+在命令行，输入以下命令，查看 80 端口占用情况：
 
 ```shell
-lsof -i :8080
+lsof -i :80
 ```
 
 输出：
 
 ```shell
-zetian@ZeTiandeMacBook-Pro ~ % lsof -i :8080
+zetian@ZeTiandeMacBook-Pro ~ % lsof -i :80
 COMMAND    PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
 Google    1546 zetian   28u  IPv4 0x6572c7c7276f9c0b      0t0  TCP localhost:49728->localhost:http-alt (CLOSED)
 nginx     1812 zetian    6u  IPv4 0x6572c7c72771be73      0t0  TCP *:http-alt (LISTEN)
 nginx     1813 zetian    6u  IPv4 0x6572c7c72771be73      0t0  TCP *:http-alt (LISTEN)
 ```
 
-可以看到，8080 端口，正被 Nginx 的两个进程占用。
+可以看到，80 端口，正被 Nginx 的两个进程占用。
 
 ### 2.查看 Nginx 进程
 

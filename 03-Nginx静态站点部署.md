@@ -21,13 +21,13 @@ TLS SNI support enabled
 configure arguments: --prefix=/opt/homebrew/Cellar/nginx/1.25.4 --sbin-path=/opt/homebrew/Cellar/nginx/1.25.4/bin/nginx --with-cc-opt='-I/opt/homebrew/opt/pcre2/include -I/opt/homebrew/opt/openssl@3/include' --with-ld-opt='-L/opt/homebrew/opt/pcre2/lib -L/opt/homebrew/opt/openssl@3/lib' --conf-path=/opt/homebrew/etc/nginx/nginx.conf --pid-path=/opt/homebrew/var/run/nginx.pid --lock-path=/opt/homebrew/var/run/nginx.lock --http-client-body-temp-path=/opt/homebrew/var/run/nginx/client_body_temp --http-proxy-temp-path=/opt/homebrew/var/run/nginx/proxy_temp --http-fastcgi-temp-path=/opt/homebrew/var/run/nginx/fastcgi_temp --http-uwsgi-temp-path=/opt/homebrew/var/run/nginx/uwsgi_temp --http-scgi-temp-path=/opt/homebrew/var/run/nginx/scgi_temp --http-log-path=/opt/homebrew/var/log/nginx/access.log --error-log-path=/opt/homebrew/var/log/nginx/error.log --with-compat --with-debug --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_degradation_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-http_v3_module --with-ipv6 --with-mail --with-mail_ssl_module --with-pcre --with-pcre-jit --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module
 ```
 
-它可以查看 Nginx 的
+以上输出可以查看 Nginx 的
 
 - 安装目录，即 `--prefix=/opt/homebrew/Cellar/nginx/1.25.4`
 
 - 配置文件目录，即 `--conf-path=/opt/homebrew/etc/nginx/nginx.conf`
 
-也可以使用以下命令，来查看配置文件，常见位置：
+也可以使用以下命令，来查看配置文件位置，和配置文件语法是否正确：
 
 ```shell
 nginx -t
@@ -59,7 +59,7 @@ server {
 }
 ```
 
-`localhost /` ，表示匹配在浏览器中输入的 url，这里的 `/` 就表示匹配根目录。
+`localhost /` ，表示匹配在浏览器中输入的 url。
 
 `root html`，表示 `localhost /` 匹配的根目录（Nginx 的安装目录）下的 html 目录。
 
@@ -103,7 +103,7 @@ lrwxr-xr-x  1 zetian  admin      16  2 19 17:57 html -> ../../../var/www
 cd html
 ```
 
-并查看该目录下的内容
+查看该目录下的内容
 
 ```shell
 ls -ltr
@@ -124,7 +124,7 @@ total 16
 
 Hexo 是一个基于 Node.js 的博客框架。
 
-安装 Hexo
+全局安装 Hexo
 
 ```shell
 npm install hexo-cli -g
@@ -152,11 +152,11 @@ hexo server / hexo s
 
 生成静态资源，
 
-- 把 Markdown 格式的文章，转成静态页面，放到 public 文件夹下。
-
 ```shell
 hexo g
 ```
+
+把 Markdown 格式的文章，转成静态页面，放到 public 文件夹下。
 
 ## 五、将静态站点部署在 Nginx 上
 
