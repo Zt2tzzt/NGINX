@@ -27,7 +27,7 @@ configure arguments: --prefix=/opt/homebrew/Cellar/nginx/1.25.4 --sbin-path=/opt
 
 - 配置文件目录，即 `--conf-path=/opt/homebrew/etc/nginx/nginx.conf`
 
-也可以使用以下命令，来查看配置文件位置，和配置文件语法是否正确：
+也可以使用以下命令，来查看配置文件语法是否正确，和配置文件位置：
 
 ```shell
 nginx -t
@@ -61,7 +61,7 @@ server {
 
 `localhost /` ，表示匹配在浏览器中输入的 url。
 
-`root html`，表示 `localhost /` 匹配的根目录（Nginx 的安装目录）下的 html 目录。
+`root html`，表示 `localhost /` 匹配的 Nginx 的安装目录（根目录）下的 html 目录。
 
 `index index.html index.htm;`，表示匹配 `html` 目录下，`index.html` 或 `index.htm` 文件
 
@@ -73,7 +73,7 @@ server {
 cd /opt/homebrew/Cellar/nginx/1.25.4
 ```
 
-输入以下命令，查看目录下的内容
+输入以下命令，查看该目录下的内容
 
 ```shell
 ls -ltr
@@ -160,7 +160,7 @@ hexo g
 
 ## 五、将静态站点部署在 Nginx 上
 
-输入下方命令，进入 public 目录，并拷贝该目录下的文件到 `/opt/homebrew/Cellar/nginx/1.25.4/htmnl` 目录下：
+输入下方命令，进入 public 目录，并拷贝该目录下的文件到 `/opt/homebrew/Cellar/nginx/1.25.4/html` 目录下：
 
 ```shell
 cd public
@@ -168,7 +168,7 @@ cd public
 cp -rf * /opt/homebrew/var/www
 ```
 
-或者使用 hexo 一键部署到命令
+或者使用 hexo 一键部署的命令
 
 ```shell
 hexo d

@@ -84,6 +84,8 @@ nginx -s reload
 
 在浏览器中，访问 `https://localhost/`
 
+---
+
 一般还会在 nginx 中，配置 http 请求重定向到 https 上。
 
 ```nginx
