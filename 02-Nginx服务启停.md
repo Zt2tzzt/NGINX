@@ -84,7 +84,7 @@ nginx -s [signal]
 
 signal 可以是：
 
-- quit：优雅停止
+- quit：优雅停止，温和地停止 Nginx （即等待所有现有连接处理完毕再关闭 Nginx）
 - stop：立即停止
 - reload：重载配置文件
 - reopen：重新打开日志文件
