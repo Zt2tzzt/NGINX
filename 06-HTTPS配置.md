@@ -2,13 +2,11 @@
 
 ## 一、HTTP 和 HTTPS 
 
-HTTPS 协议是 HTTP 协议的安全版本。
+HTTPS 协议是 HTTP 协议的安全版本。它通过对传输数据的加密，来保证数据的安全性。
 
-它通过对传输数据的加密，来保证数据的安全性。
+HTTP 协议的默认端口是 80；
 
-HTTP 协议的默认端口，是 80；
-
-HTTPS 协议的默认端口，是 443.
+HTTPS 协议的默认端口是 443.
 
 HTTPS 协议，需要使用到 SSL 证书，在各主流云平台上都可以申请到。
 
@@ -66,6 +64,19 @@ http {
     ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;
     # 使用服务器端端首选算法
     ssl_prefer_server_ciphers on;
+
+    location /app {
+      proxy_pass http://backend;
+    }
+    location / {
+      root html;
+      index index.html index.htm;
+    }
+
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+      root html;
+    }
   }
 }
 ```
