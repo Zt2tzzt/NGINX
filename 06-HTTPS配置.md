@@ -45,7 +45,9 @@ openssl x509 -req -in cert.csr -out cacert.pem -signkey private.key
 
 这两个文件，要放在服务器上，然后在 nginx.conf 中进行配置。
 
-## 三、配置 Nginx
+## 三、Nginx HTTPS 配置
+
+### 1.443 端口配置
 
 ```nginx
 http {
@@ -95,7 +97,7 @@ nginx -s reload
 
 在浏览器中，访问 `https://localhost/`
 
----
+### 2.80 端口重定向到 443 端口配置
 
 一般还会在 nginx 中，配置 http 请求重定向到 https 上。
 
