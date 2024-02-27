@@ -76,13 +76,13 @@ cd /opt/homebrew/Cellar/nginx/1.25.4
 输入以下命令，查看该目录下的内容
 
 ```shell
-ls -l
+ls -ltr
 ```
 
 输出：
 
 ```shell
-zetian@ZeTiandeMacBook-Pro 1.25.4 % ls -l
+zetian@ZeTiandeMacBook-Pro 1.25.4 % ls -ltr
 total 680
 drwxr-xr-x  4 zetian  admin     128  2 15 00:03 share
 -rw-r--r--  1 zetian  admin      49  2 15 00:03 README
@@ -106,13 +106,13 @@ cd html
 查看该目录下的内容
 
 ```shell
-ls -l
+ls -ltr
 ```
 
 输出：
 
 ```shell
-zetian@ZeTiandeMacBook-Pro html % ls -l
+zetian@ZeTiandeMacBook-Pro html % ls -ltr
 total 16
 -rw-r--r--  1 zetian  admin  615  2 15 00:03 index.html
 -rw-r--r--  1 zetian  admin  497  2 15 00:03 50x.html
