@@ -1,6 +1,6 @@
 # Nginx 静态站点部署
 
-## 一、查看配置文件位置
+## 一、配置文件位置查看
 
 在命令行输入以下命令：
 
@@ -76,13 +76,13 @@ cd /opt/homebrew/Cellar/nginx/1.25.4
 输入以下命令，查看该目录下的内容
 
 ```shell
-ls -ltr
+ls -l
 ```
 
 输出：
 
 ```shell
-zetian@ZeTiandeMacBook-Pro 1.25.4 % ls -ltr
+zetian@ZeTiandeMacBook-Pro 1.25.4 % ls -l
 total 680
 drwxr-xr-x  4 zetian  admin     128  2 15 00:03 share
 -rw-r--r--  1 zetian  admin      49  2 15 00:03 README
@@ -106,13 +106,13 @@ cd html
 查看该目录下的内容
 
 ```shell
-ls -ltr
+ls -l
 ```
 
 输出：
 
 ```shell
-zetian@ZeTiandeMacBook-Pro html % ls -ltr
+zetian@ZeTiandeMacBook-Pro html % ls -l
 total 16
 -rw-r--r--  1 zetian  admin  615  2 15 00:03 index.html
 -rw-r--r--  1 zetian  admin  497  2 15 00:03 50x.html
@@ -180,7 +180,7 @@ ChatGPT:
 >
 > `hexo deploy` 或 `hexo d` 命令的作用是部署你的网站。在你运行这个命令前，你需要在你的 Hexo 配置文件 `_config.yml` 中设定部署的相关配置。
 >
-> 具体执行过程中，Hexo 会根据配置文件中的 `deploy` 选项来确定部署的目标地。部署的目的地可以是 GitHub、GitLab、Heroku 等多种类型的远程主机。
+> 具体执行过程中，Hexo 会根据配置文件中的 `deploy` 选项来确定部署的目的地。部署的目的地可以是 GitHub、GitLab、Heroku 等多种类型的远程主机。
 >
 > 例如，如果你的 `_config.yml` 文件中的 `deploy` 选项如下所示：
 >
