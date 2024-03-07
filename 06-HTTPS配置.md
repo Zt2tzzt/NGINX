@@ -1,6 +1,6 @@
 # HTTPS 配置
 
-## 一、HTTP 和 HTTPS 
+## 一、HTTP 和 HTTPS
 
 HTTPS 协议是 HTTP 协议的安全版本。它通过对传输数据的加密，来保证数据的安全性。
 
@@ -103,7 +103,7 @@ nginx -s reload
 
 ```nginx
 http {
-	server {
+  server {
     listen 80;
     server_name localhost; # 域名
     return 301 https://$server_name$request_uri;
@@ -118,4 +118,3 @@ http {
 ```shell
 nginx -s reload
 ```
-
