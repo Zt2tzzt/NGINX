@@ -2,7 +2,7 @@
 
 ## 一、包管理器安装
 
-liunx
+Liunx Ubuntu 发行版
 
 ```shell
 sudo apt update

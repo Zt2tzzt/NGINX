@@ -37,7 +37,7 @@ nginx     1813 zetian    6u  IPv4 0x6572c7c72771be73      0t0  TCP *:http-alt (L
 在命令行输入以下命令，查看 Nginx 进程：
 
 ```shell
-ps -ef|grep nginx
+ps -ef | grep nginx
 ```
 
 输出：
