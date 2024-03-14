@@ -27,7 +27,7 @@ configure arguments: --prefix=/opt/homebrew/Cellar/nginx/1.25.4 --sbin-path=/opt
 
 - 配置文件目录，即 `--conf-path=/opt/homebrew/etc/nginx/nginx.conf`
 
-也可以使用以下命令，来查看配置文件语法是否正确，和配置文件位置：
+使用以下命令，验证配置文件语法，查看配置文件位置：
 
 ```shell
 nginx -t
@@ -59,7 +59,7 @@ server {
 }
 ```
 
-`localhost /` ，表示匹配在浏览器中输入的 url。
+`localhost /` ，表示匹配在浏览器中输入的 urll 中的路径 `/`，即没有路径。
 
 `root html`，表示 `localhost /` 匹配的 Nginx 的安装目录（根目录）下的 html 目录。
 
