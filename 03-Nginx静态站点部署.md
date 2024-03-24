@@ -5,10 +5,8 @@
 在命令行输入以下命令：
 
 ```shell
-nginx -V
+nginx -V # 大写的 V
 ```
-
-注意：是大写的 V
 
 输出：
 
@@ -59,7 +57,7 @@ server {
 }
 ```
 
-`localhost /` ，表示匹配在浏览器中输入的 urll 中的路径 `/`，即没有路径。
+`localhost /` ，表示匹配在浏览器中输入的 url 中的路径 `/`，即没有路径。
 
 `root html`，表示 `localhost /` 匹配的 Nginx 的安装目录（根目录）下的 html 目录。
 
