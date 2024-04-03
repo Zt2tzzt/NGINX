@@ -63,6 +63,83 @@ server {
 
 `index index.html index.htm;`，表示匹配 `html` 目录下，`index.html` 或 `index.htm` 文件
 
+### 1.location 补充
+
+`location` 指令，不仅要匹配 url，还要匹配服务器上对应的目录，比如将上面的配置改为如下：
+
+```nginx
+server {
+  listen 80;
+  server_name localhost;
+
+  location /app {
+    root html;
+    index index.html index.htm;
+  }
+}
+```
+
+再访问 `localhost/app`，nginx 会返回 404，因为 html 目录下，没有 app 目录。
+
+在 html 目录下，创建 app 文件夹，将 index.html 文件放入其中，再请求 `localhost/app`，还是有问题。因为这么写，nginx 会去找目录下的 app 文件。
+
+正确的请求方式是：`localhost/app/`，或 `localhost/app/index.html`.
+
+然而，我们会发现，当请求 url 是 `localhost/apple/` 时，也能正确返回。这是因为上面的配置可以匹配所有“app”前缀的路径，如果要设置精确匹配，应该进行如下设置：
+
+```nginx
+server {
+  listen 80;
+  server_name localhost;
+
+  location = /app {
+    root html;
+    index index.html index.htm;
+  }
+}
+```
+
+这样，就只能匹配 `localhost/app/` 的请求方式了。
+
+在 loacation 和 路径之间，使用 ～，启用正则表达式。
+
+```nginx
+server {
+  location ~ /videos/video[6-9].avi {
+    root /var/www/localhost;
+  }
+}
+```
+
+以上配置，表示匹配 /var/www/localhost/videos 下 video6.avi、video7.avi、video8.avi、video9.avi 三个文件。
+
+`~*` 表示不区分文件名的大小写，但如果要正确匹配文件，请求 url 中仍热要严格区分目录和文件名单大小写。。
+
+lcation 指令匹配的优先级：
+
+1. `=`，表示精确匹配。
+2. `^~`，表示优先前缀匹配（功能和前缀匹配类似）。
+3. `~` 或 `~*` ，表示正则表达式匹配。
+4. 空格，表示普通匹配。
+
+在 location 中，进行请求的重写：将重定向请求 `localhost/temp` 为它返回服务器上 /app/index.html  文件。
+
+```nginx
+server {
+  location /temp {
+    return 307 /app/index.html
+  }
+}
+```
+
+更隐蔽的重定向请求方式，用户一般看不出来：
+
+```nginx
+server {
+  rewrite /temp /app/index.html
+}
+```
+
 ## 三、Nginx 的安装目录（根目录）分析
 
 输入以下命令，进入 Nginx 的安装目录：
