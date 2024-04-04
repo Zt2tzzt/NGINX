@@ -63,7 +63,7 @@ server {
 
 `index index.html index.htm;`，表示匹配 `html` 目录下，`index.html` 或 `index.htm` 文件
 
-### 1.location 补充
+### 1.location 路径匹配
 
 `location` 指令，不仅要匹配 url，还要匹配服务器上对应的目录，比如将上面的配置改为如下：
 
@@ -81,11 +81,13 @@ server {
 
 再访问 `localhost/app`，nginx 会返回 404，因为 html 目录下，没有 app 目录。
 
-在 html 目录下，创建 app 文件夹，将 index.html 文件放入其中，再请求 `localhost/app`，还是有问题。因为这么写，nginx 会去找目录下的 app 文件。
+在 html 目录下，创建 app 文件夹，将 index.html 文件放入其中，再请求 `localhost/app`，还是有问题。因为这么写，nginx 会去找目录下的 app 文件。正确的请求方式应该是：`localhost/app/`，或 `localhost/app/index.html`.
 
-正确的请求方式是：`localhost/app/`，或 `localhost/app/index.html`.
+### 2.location 路径精确匹配
 
-然而，我们会发现，当请求 url 是 `localhost/apple/` 时，也能正确返回。这是因为上面的配置可以匹配所有“app”前缀的路径，如果要设置精确匹配，应该进行如下设置：
+然而，我们会发现，当请求 url 是 `localhost/apple/` 时，也能正确返回。这是因为上面的配置可以匹配所有“app”前缀的路径。
+
+如果要设置精确匹配，应该进行如下配置：
 
 ```nginx
 server {
@@ -101,6 +103,8 @@ server {
 
 这样，就只能匹配 `localhost/app/` 的请求方式了。
 
+### 3.location 正则匹配
+
 在 loacation 和 路径之间，使用 ～，启用正则表达式。
 
 ```nginx
@@ -113,16 +117,18 @@ server {
 
 以上配置，表示匹配 /var/www/localhost/videos 下 video6.avi、video7.avi、video8.avi、video9.avi 三个文件。
 
-`~*` 表示不区分文件名的大小写，但如果要正确匹配文件，请求 url 中仍热要严格区分目录和文件名单大小写。。
+`~*` 表示不区分文件名的大小写，但如果要正确匹配文件，请求 url 中仍然要严格区分目录和文件名单大小写。。
 
-lcation 指令匹配的优先级：
+### 4.location 匹配优先级
 
 1. `=`，表示精确匹配。
 2. `^~`，表示优先前缀匹配（功能和前缀匹配类似）。
 3. `~` 或 `~*` ，表示正则表达式匹配。
 4. 空格，表示普通匹配。
 
-在 location 中，进行请求的重写：将重定向请求 `localhost/temp` 为它返回服务器上 /app/index.html  文件。
+### 5.location 重定向匹配
+
+在 location 中，进行请求的重定向：为请求 `localhost/temp` 返回服务器上 /app/index.html  文件。
 
 ```nginx
 server {
@@ -132,13 +138,43 @@ server {
 }
 ```
 
-更隐蔽的重定向请求方式，用户一般看不出来：
+以上重定向配置，会改变请求 url 的地址，如果要达到更隐蔽的重定向请求效果（用户一般看不出来），应该进行如下配置：
 
 ```nginx
 server {
+  listen 80;
+  server_name localhost;
+  root /var/www/location
+
   rewrite /temp /app/index.html
 }
 ```
+
+以上配置，表示为请求 `localhost/temp` 返回服务器上 /app/index.html  文件
+
+重定向、重写，主要针对单个文件路径。如果要让 Nginx 有多个文件可以选择，需要使用 try_files
+
+```nginx
+server {
+  location / {
+    try_files $uri $uri/ =404
+  }
+}
+```
+
+以上配置表示，先尝试匹配 url 中单文件名，如果文件名不存在则匹配 ur 中单目录名下单 index.html，如果也不存在则返回 404.
+
+配置 404 页面
+
+```nginx
+server {
+  location {
+    error_page 404 /404.html
+  }
+}
+```
+
+以上配置，表示当出现 404 时，返回 /404.html 文件。
 
 ## 三、Nginx 的安装目录（根目录）分析
 
