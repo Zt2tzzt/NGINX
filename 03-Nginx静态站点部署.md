@@ -176,6 +176,23 @@ server {
 
 以上配置，表示当出现 404 时，返回 /404.html 文件。
 
+### 6.localtion 配置图片静态资源
+
+```nginx
+server {
+  location /images/ {
+  	alias /opt/temp/;
+    autoindex on;
+  }
+}
+```
+
+- `location /images/`：这是图片资源的 URL 路径，您可以根据需要进行修改。
+- `root /opt/temp/`：这是图片文件夹的实际路径，确保与您创建的文件夹路径一致。
+- `autoindex on;`：此选项表示自动创建索引，允许浏览文件夹中的图片。
+
+现在，您可以通过访问以下链接来查看您上传的图片 `ip地址/images/1.jpg`
+
 ## 三、Nginx 的安装目录（根目录）分析
 
 输入以下命令，进入 Nginx 的安装目录：
@@ -231,7 +248,7 @@ total 16
 
 可以看到，确实有 index.html 文件，该文件，就是浏览器中看到的欢迎页。
 
-## 四、静态网站生成
+## 四、Hexo 生成静态网站
 
 Hexo 是一个基于 Node.js 的博客框架。
 
@@ -269,7 +286,7 @@ hexo g
 
 把 Markdown 格式的文章，转成静态页面，放到 public 文件夹下。
 
-## 五、将静态站点部署在 Nginx 上
+将生成的静态站点，部署在 Nginx 上
 
 输入下方命令，进入 public 目录，并拷贝该目录下的文件到 `/opt/homebrew/Cellar/nginx/1.25.4/html` 目录下：
 
