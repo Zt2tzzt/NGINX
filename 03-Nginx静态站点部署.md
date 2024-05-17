@@ -162,7 +162,7 @@ server {
 }
 ```
 
-以上配置表示，先尝试匹配 url 中单文件名，如果文件名不存在则匹配 ur 中单目录名下单 index.html，如果也不存在则返回 404.
+以上配置表示，先尝试匹配 url 中单文件名，如果文件名不存在则匹配 url 中单目录名下单 index.html，如果也不存在则返回 404.
 
 配置 404 页面
 
@@ -181,7 +181,7 @@ server {
 ```nginx
 server {
   location /images/ {
-  	alias /opt/temp/;
+    alias /opt/temp/;
     autoindex on;
   }
 }
