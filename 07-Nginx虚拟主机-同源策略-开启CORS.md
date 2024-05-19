@@ -92,20 +92,20 @@ Nginx 可以在一个端口下，既部署静态资源，又反向代理后端�
 
 ```nginx
 server {
-    listen 80;
-    server_name localhost;
+  listen 80;
+  server_name localhost;
 
-    location / {
-        root /var/www/html;  # 这里填写你的静态文件路径
-        index index.html index.htm;  # 这里填你的默认首页文件名
-    }
+  location / {
+    root /var/www/html; # 这里填写你的静态文件路径
+    index index.html index.htm; # 这里填你的默认首页文件名
+  }
 
-    location /api/ {
-        proxy_pass http://localhost:8080/;  # 这里填写你的后端 API 服务地址
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
+  location /api/ {
+    proxy_pass http://localhost:8080/; # 这里填写你的后端 API 服务地址
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
 }
 ```
 
@@ -128,20 +128,20 @@ server {
   server_name localhost;
 
   location / {
-      # root   html;
-      # index  index.html index.htm;
+    # root   html;
+    # index  index.html index.htm;
 
-      # 简单请求
-      add_header Access-Control-Allow-Origin *;
-      # 非简单请求
-      add_header Access-Control-Allow-Headers "Accept, Accept-Encoding, Accept-Language, Connection, Content-Length, Content-Type, Host, Origin, Referer,User-Agent";
-      add_header Access-Control-Allow-Credentials true;
-      add_header Access-Control-Allow-Methods "PUT, POST, GET, DELETE, PATCH, OPTIONS";
-      if ($request_method = "OPTIONS") {
-          return 204;
-      }
+    # 简单请求
+    add_header Access-Control-Allow-Origin *;
+    # 非简单请求
+    add_header Access-Control-Allow-Headers "Accept, Accept-Encoding, Accept-Language, Connection, Content-Length, Content-Type, Host, Origin, Referer,User-Agent";
+    add_header Access-Control-Allow-Credentials true;
+    add_header Access-Control-Allow-Methods "PUT, POST, GET, DELETE, PATCH, OPTIONS";
+    if ($request_method = "OPTIONS") {
+      return 204;
+    }
 
-      proxy_pass http://localhost:9000; # API 服务器的源
+    proxy_pass http://localhost:9000; # API 服务器的源
   }
 }
 ```
@@ -150,31 +150,31 @@ server {
 
 ```nginx
 server {
-    listen 80;
-    server_name localhost;
+  listen 80;
+  server_name localhost;
 
-    location / {
-        add_header 'Access-Control-Allow-Origin' '*';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
-        add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
+  location / {
+    add_header 'Access-Control-Allow-Origin' '*';
+    add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+    add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
+    add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
 
-        # 如果需要带有 Cookie 的跨域请求，需要设置下面这行
-        add_header 'Access-Control-Allow-Credentials' 'true';
+    # 如果需要带有 Cookie 的跨域请求，需要设置下面这行
+    add_header 'Access-Control-Allow-Credentials' 'true';
 
-        # 如果有预检请求（preflight）也要添加如下配置
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' '*';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
-            add_header 'Access-Control-Max-Age' 1728000;
-            add_header 'Content-Type' 'text/plain charset=UTF-8';
-            add_header 'Content-Length' 0;
-            return 204;
-        }
-
-        # 添加其他反向代理配置
-        proxy_pass http://localhost:9000;
+    # 如果有预检请求（preflight）也要添加如下配置
+    if ($request_method = 'OPTIONS') {
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+      add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
+      add_header 'Access-Control-Max-Age' 1728000;
+      add_header 'Content-Type' 'text/plain charset=UTF-8';
+      add_header 'Content-Length' 0;
+      return 204;
     }
+
+    # 添加其他反向代理配置
+    proxy_pass http://localhost:9000;
+  }
 }
 ```

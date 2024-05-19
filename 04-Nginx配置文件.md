@@ -1,6 +1,23 @@
 # Nginx 配置文件
 
-## 一、worker 进程
+nginx 配置文件，主要由三个全局代码快组成。
+
+## 一、全局块
+
+最外层是全局块，
+
+其中主要是修改 worker 进程的代码块、指定运行服务的用户...配置。
+
+```nginx
+#user  nobody;
+worker_processes 1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+```
 
 worker 进程的数量，可以通过配置文件的修改。
 
@@ -44,28 +61,7 @@ worker_processes auto;
 nginx -s reload
 ```
 
-## 二、代码快分析
-
-nginx 配置文件，主要由三个全局代码快组成。
-
-### 1.全局块
-
-最外层是全局块，
-
-其中主要是修改 worker 进程的代码块、指定运行服务的用户...配置。
-
-```nginx
-#user  nobody;
-worker_processes 1;
-
-#error_log  logs/error.log;
-#error_log  logs/error.log  notice;
-#error_log  logs/error.log  info;
-
-#pid        logs/nginx.pid;
-```
-
-### 2.events 块
+## 二、events 块
 
 events 代码块，主要是服务器和客户端之间网络连接的一些配置。
 
@@ -77,7 +73,7 @@ events {
 }
 ```
 
-### 3.http 块
+## 三、http 块
 
 http 代码块，是 nginx.conf 文件中，修改最频繁的部分。
 
@@ -179,13 +175,13 @@ http {
 
 http 块中，又可以包含多个 server 块；也叫“虚拟主机”，
 
-最后一行的 ` include servers/*;` 表示把 servers 目录下的所有配置文件，都加载进来。
+最后一行的 `include servers/*;` 表示把 servers 目录下的所有配置文件，都加载进来。
 
 这样每个虚拟主机的配置，都可以放在单独的文件里面，让主配置文件，更加简洁清晰。
 
 include 指令，还可以包含其他配置文件，
 
-比如上方的 ` include mime.types;`，就是把 mime.types 这个文件，加载进来。
+比如上方的 `include mime.types;`，就是把 mime.types 这个文件，加载进来。
 
 查看 mime.type 文件，可以看到其中定义了很多 MIME 的类型。
 

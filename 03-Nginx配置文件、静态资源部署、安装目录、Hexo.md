@@ -1,4 +1,4 @@
-# Nginx 静态站点部署
+# Nginx 配置文件、静态资源部署、安装目录、Hexo
 
 ## 一、配置文件位置查看
 
@@ -39,7 +39,7 @@ nginx: the configuration file /opt/homebrew/etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful
 ```
 
-## 二、配置文件分析
+## 二、localtion 配置静态站点
 
 使用 VSCode 打开配置文件。
 
@@ -176,7 +176,7 @@ server {
 
 以上配置，表示当出现 404 时，返回 /404.html 文件。
 
-### 6.localtion 配置图片静态资源
+## 三、localtion 配置图片静态资源
 
 ```nginx
 server {
@@ -192,6 +192,26 @@ server {
 - `autoindex on;`：此选项表示自动创建索引，允许浏览文件夹中的图片。
 
 现在，您可以通过访问以下链接来查看您上传的图片 `ip地址/images/1.jpg`
+
+### 1.为图片设置缓存时间
+
+```nginx
+server {
+  listen 80;
+  server_name example.com;
+  location / {
+    root /path/to/your/static/files;
+    index index.html index.htm;
+  }
+  location ~* \.(jpg|png|gif|jpeg)$ {
+    expires 30d;
+    add_header Cache-Control "public";
+  }
+}
+```
+
+- Nginx 配置为服务静态文件，如 HTML、CSS、JavaScript 和图片等。通过设置 `root` 指令，指定了静态文件的根目录。
+- 同时，对于图片文件，通过 `expires` 指令设置了缓存时间为 30 天，减少了服务器的负载和用户等待时间。
 
 ## 三、Nginx 的安装目录（根目录）分析
 

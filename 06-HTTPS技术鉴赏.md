@@ -1,127 +1,8 @@
-# HTTPS 配置
-
-## 一、HTTP 和 HTTPS
-
-HTTPS 协议是 HTTP 协议的安全版本。它通过对传输数据的加密，来保证数据的安全性。
-
-HTTP 协议的默认端口是 80；
-
-HTTPS 协议的默认端口是 443.
-
-HTTPS 协议，需要使用到 SSL 证书，在各主流云平台上都可以申请到。
-
-SSL 证书申请成功后，会得到「证书文件」和「密钥文件」。
-
-## 二、自签名 ssl 证书
-
-也可用 openssl，来生成一个自签名的证书（该证书没有得到 CA 机构的认证，浏览器会提示不安全）。
-
-使用如下三个命令：
-
-生成私钥文件（private.key）
-
-```shell
-openssl genrsa -out private.key 2048
-```
-
-根据私钥生成证书签名请求文件（Certification Signing Request，简称 CSR 文件）
-
-```shell
-openssl req -new -key private.key -out cert.csr
-```
-
-使用私钥对证书申请进行签名，从而生成证书文件（pem 文件）
-
-```shell
-openssl x509 -req -in cert.csr -out cacert.pem -signkey private.key
-```
-
-执行命令时，会要求输入以下信息：比如国家，省份，城市，公司，邮箱等等。
-
-填写完成后，就会生成两个关键文件：
-
-- 私钥文件：private.key
-- 证书文件：cacert.pem
-
-这两个文件，要放在服务器上，然后在 nginx.conf 中进行配置。
-
-## 三、Nginx HTTPS 配置
-
-### 1.443 端口配置
-
-```nginx
-http {
-  server {
-    listen 443 ssl;
-    server_name localhost;
-    # 证书文件名
-    ssl_certificate /opt/homebrew/etc/nginx/cacert.pem;
-    # 证书私钥文件名
-    ssl_certificate_key /opt/homebrew/etc/nginx/private.key;
-    # ssl 验证配置
-    ssl_session_timeout 5m; # 缓存有效期
-    # 安全链接可选的加密协议
-    ssl_protocols SSLv2 SSLv3 TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
-    # 配置加密套件/加密算法，写法遵循 openssl 标准
-    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;
-    # 使用服务器端端首选算法
-    ssl_prefer_server_ciphers on;
-
-    location /app {
-      proxy_pass http://backend;
-    }
-    location / {
-      root html;
-      index index.html index.htm;
-    }
-
-    error_page 500 502 503 504 /50x.html;
-    location = /50x.html {
-      root html;
-    }
-  }
-}
-```
-
-- listen 后面，加上 443 端口和 ssl；
-- server_name 后面，一般是网站域名。
-- 后面的加密算法配置，一般都是固定的。
-
-重载 nginx 配置
-
-```shell
-nginx -s reload
-```
-
-在浏览器中，访问 `https://localhost/`
-
-### 2.80 端口重定向到 443 端口配置
-
-一般还会在 nginx 中，配置 http 请求重定向到 https 上。
-
-```nginx
-http {
-  server {
-    listen 80;
-    server_name localhost; # 域名
-    return 301 https://$server_name$request_uri;
-  }
-}
-```
-
-301 是 Http 响应状态码，表示请求资源的 URL 已经修改，响应中会给出新的 URL
-
-重载 nginx 配置
-
-```shell
-nginx -s reload
-```
-
-## 四、HTTPS 技术鉴赏
+# HTTPS 技术鉴赏
 
 [参考资料](https://www.bilibili.com/video/BV1uY4y1D7Ng)
 
-### 1.HTTP 协议的缺陷
+## 1.HTTP 协议的缺陷
 
 HTTP 以明文的形式传递信息。攻击者可以在信息传递的途中，轻松地实现信息的见查看和篡改。攻击者可以查看浏览器发送给服务器的帐号，密码等等信息，也可以查看到服务器发送给浏览器的定制版页面。
 
@@ -129,13 +10,13 @@ HTTP 以明文的形式传递信息。攻击者可以在信息传递的途中，
 
 为了预防这种情况的出现，网景公司最早在自己的浏览器中，实现了 https 协议。它的原理，就是是用密钥对发送的信息进行加密和解密。
 
-### 2.对称加密
+## 2.对称加密
 
 加密者用密钥加密信息，得到密文；解密者用密钥解密信息，得到明文。这被称为“对称加密”。加密、解密都是用同一个密钥，互为逆向过程。
 
 使用“对称加密”的方式，浏览器和服务器要协商出一个相同的密钥，且不能通过明文的方式互相发送（因为这很用可能会被攻击者拦截），所以只能在线下协商出一个相同的密钥。这显然是不合理的。
 
-### 3.非对称加密
+## 3.非对称加密
 
 所以，更为实际的办法，是使用“非对称加密”。在“非对称加密”中，密钥总是成对出现，分别称之为“公钥”和“私钥”。
 
@@ -144,13 +25,13 @@ HTTP 以明文的形式传递信息。攻击者可以在信息传递的途中，
 
 也就是说，“非对称加密”的加、解密的过程，并不对称。
 
-### 4.SSL 握手
+## 4.SSL 握手
 
 这样，服务器将自己的公钥，发给浏览器（客户端），浏览器生成一个随机数据，用服务器的公钥加密，再发送给服务器，服务器再用自己的私钥解密，如此双方就得到了一个同样的随机数据。这个随机数据，便可以作为对称加密的密钥，对真正要传递的数据，进行加密。
 
 总结：使用非对称加密，协商出一个相同的密钥，然后用这个密钥，进行堆成加密传输正式数据。这就是 HTTPS 协议中，“S”的大致原理。这是一套独立于 HTTP 协议的流程，也被称为安全套接字层（Secure Socket Layer），简称 SSL。这个密钥协商的过程，也被称为 SSL 握手。
 
-### 5.SSL 的历史
+## 5.SSL 的历史
 
 1. 1994 年，SSL 1.0 发布。
 2. 1995 年，SSL 2.0 发布。
@@ -162,7 +43,7 @@ HTTP 以明文的形式传递信息。攻击者可以在信息传递的途中，
 
 TSL 升级的内容，主要是对安全细节的改善，比如：随着 MD5 和 SHA-1 逐渐丧失安全性，TSL 1.2 升级的主要内容就包括淘汰这两个哈希函数，而用 SHA-256 取而代之。
 
-### 6.CA 机构
+## 6.CA 机构
 
 问题似乎得到了解决，但仍然存在棘手的问题。
 
