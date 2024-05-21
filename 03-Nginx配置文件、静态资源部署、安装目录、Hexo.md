@@ -39,6 +39,8 @@ nginx: the configuration file /opt/homebrew/etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful
 ```
 
+> 在 Nginx 配置文件中，可以使用相对路径来引用其他配置文件或资源。相对路径是相对于 Nginx 主配置文件（通常是 `nginx.conf`）所在的目录进行解析的。
+
 ## 二、localtion 配置静态站点
 
 使用 VSCode 打开配置文件。
@@ -79,9 +81,15 @@ server {
 }
 ```
 
-再访问 `localhost/app`，nginx 会返回 404，因为 html 目录下，没有 app 目录。
+再访问 `localhost/app`，nginx 会返回 404，
 
-在 html 目录下，创建 app 文件夹，将 index.html 文件放入其中，再请求 `localhost/app`，还是有问题。因为这么写，nginx 会去找目录下的 app 文件。正确的请求方式应该是：`localhost/app/`，或 `localhost/app/index.html`.
+- 因为 html 目录下，没有 app 目录。
+
+在 html 目录下，创建 app 文件夹，将 index.html 文件放入其中，再请求 `localhost/app`，还是有问题。
+
+- 因为这么写，nginx 会去找目录下的 app 文件。
+
+正确的请求方式应该是：`localhost/app/`，或 `localhost/app/index.html`.
 
 ### 2.location 路径精确匹配
 
