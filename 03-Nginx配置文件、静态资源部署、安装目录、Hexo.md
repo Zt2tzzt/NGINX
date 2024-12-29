@@ -85,9 +85,11 @@ server {
 
 - 因为 html 目录下，没有 app 目录。
 
-在 html 目录下，创建 app 文件夹，将 index.html 文件放入其中，再请求 `localhost/app`，还是有问题。
+在 html 目录下，创建 app 文件夹，将 index.html 文件放入其中，此时文件路径为 `html/app/index.html`；
 
-- 因为这么写，nginx 会去找目录下的 app 文件。
+再请求 `localhost/app`，还是有问题。
+
+- 因为这么写，nginx 会去找 ``html/app/` 目录下的 app 文件。
 
 正确的请求方式应该是：`localhost/app/`，或 `localhost/app/index.html`.
 
